@@ -1,12 +1,10 @@
 package edu.fordham.notes;
 
-import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
@@ -30,30 +28,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NoteItemViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull NoteItemViewHolder holder, int position) {
-        Note note = notes.get(position);
-        holder.noteTitleView.setText(note.title);
-        holder.noteTitleView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
-                builder.setTitle(note.title);
-                builder.setPositiveButton("Edit", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                        Note.open(v.getContext(), note.nid, false);
-                    }
-                });
-                builder.setNegativeButton("Delete", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                        noteDao.deleteNote(note);
-                        notes.remove(note);
-                        notifyItemRemoved(position);
-                    }
-                });
-                builder.create().show();
-            }
-        });
+        holder.updateView(this, notes, position);
     }
 
     @Override
